@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MailIcon, MapPinIcon, PhoneIcon } from "lucide-react";
 
+import { BrandLogo } from "@/components/brand/brand-logo";
 import { Container } from "@/components/layout/container";
 import { Separator } from "@/components/ui/separator";
 import { siteConfig } from "@/config/site";
@@ -12,10 +13,7 @@ export function SiteFooter() {
     <footer id="contact" className="bg-noir text-[#f5ede2]">
       <Container className="grid gap-10 py-12 md:grid-cols-3 md:py-16">
         <div className="space-y-4">
-          <div className="flex items-baseline gap-1.5">
-            <span className="font-heading text-3xl font-semibold">7</span>
-            <span className="text-sm font-medium tracking-[0.35em] uppercase">Seven</span>
-          </div>
+          <BrandLogo variant="white" className="h-7" />
           <p className="max-w-xs text-sm text-[#f5ede2]/70">{siteConfig.description}</p>
         </div>
 

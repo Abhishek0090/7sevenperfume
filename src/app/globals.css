@@ -17,7 +17,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-playfair);
+  --font-heading: var(--font-display);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -167,6 +167,17 @@
   50% { transform: translate3d(0, -24px, 0) rotate(8deg); }
 }
 
+/* Hero logo: each letter slides in from the left, then the whole logo glows once. */
+@keyframes logo-letter-in {
+  from { opacity: 0; transform: translateX(-40px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes logo-glow {
+  0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+  45% { filter: drop-shadow(0 0 8px color-mix(in oklch, var(--gold-light) 75%, transparent)) drop-shadow(0 0 1px color-mix(in oklch, var(--gold) 60%, transparent)); }
+}
+
 @keyframes shimmer {
   from { background-position: -200% 0; }
   to { background-position: 200% 0; }
@@ -193,5 +204,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] { opacity: 1; transform: none; filter: none; transition: none; }
-  .animate-marquee, .animate-float, .animate-shimmer { animation: none; }
+  .animate-marquee, .animate-float, .animate-shimmer, .animate-logo-letter, .animate-logo-glow { animation: none !important; opacity: 1 !important; }
 }

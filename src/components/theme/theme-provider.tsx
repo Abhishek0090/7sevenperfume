@@ -6,11 +6,11 @@ export type Theme = "light" | "dark";
 
 const STORAGE_KEY = "7seven-theme";
 
-/** Light is the default; dark is used only when the visitor has chosen it. */
-const DEFAULT_THEME: Theme = "light";
+/** Dark is the default; light is used only when the visitor has chosen it. */
+const DEFAULT_THEME: Theme = "dark";
 
-/** Runs in <head> before first paint so a saved dark choice never flashes light. */
-export const themeInitScript = `(function(){try{document.documentElement.classList.toggle("dark",localStorage.getItem("${STORAGE_KEY}")==="dark")}catch(e){}})();`;
+/** Runs in <head> before first paint so the page never flashes the wrong theme. */
+export const themeInitScript = `(function(){var d=true;try{d=localStorage.getItem("${STORAGE_KEY}")!=="light"}catch(e){}document.documentElement.classList.toggle("dark",d)})();`;
 
 interface ThemeContextValue {
   theme: Theme;
@@ -25,9 +25,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(DEFAULT_THEME);
 
   useEffect(() => {
-    if (document.documentElement.classList.contains("dark")) {
+    if (!document.documentElement.classList.contains("dark")) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing from the class set by themeInitScript
-      setThemeState("dark");
+      setThemeState("light");
     }
   }, []);
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, Geist_Mono, Jost } from "next/font/google";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -10,7 +10,8 @@ import { siteConfig } from "@/config/site";
 import { CartProvider } from "@/features/cart/store/cart-context";
 import "./globals.css";
 
-const geistSans = Geist({
+// Body and UI: clean geometric sans that matches the thin, round strokes of the logo.
+const jost = Jost({
   variable: "--font-sans",
   subsets: ["latin"],
 });
@@ -20,9 +21,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+// Headings: high-contrast luxury serif.
+const cormorant = Cormorant_Garamond({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -38,7 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full scroll-smooth antialiased`}
+      className={`${jost.variable} ${geistMono.variable} ${cormorant.variable} h-full scroll-smooth antialiased`}
       // themeInitScript adds the "dark" class before React hydrates.
       suppressHydrationWarning
     >

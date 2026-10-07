@@ -5,13 +5,7 @@ import { useEffect, useRef } from "react";
 
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/motion/reveal";
-
-const STATS = [
-  { value: 7, suffix: "", label: "Signature scents" },
-  { value: 4.7, suffix: "", label: "Average rating", decimals: 1 },
-  { value: 900, suffix: "+", label: "Happy customers" },
-  { value: 12, suffix: "h", label: "Lasting wear" },
-];
+import type { HeroStats } from "./hero-parallax";
 
 /** Counts a number up from 0 the first time it scrolls into view. */
 function CountUp({ value, suffix, decimals = 0 }: { value: number; suffix: string; decimals?: number }) {
@@ -52,8 +46,15 @@ function CountUp({ value, suffix, decimals = 0 }: { value: number; suffix: strin
 }
 
 /** Dark storytelling section with parallax image stack and animated stats. */
-export function BrandStory() {
+export function BrandStory({ stats }: { stats: HeroStats }) {
   const sectionRef = useRef<HTMLElement>(null);
+  // Same catalogue figures as the hero, so the page never contradicts itself.
+  const STATS = [
+    { value: stats.perfumeCount, suffix: "", label: "Signature scents" },
+    { value: Number(stats.averageRating.toFixed(1)), suffix: "", label: "Average rating", decimals: 1 },
+    { value: stats.totalReviews, suffix: "", label: "Customer reviews" },
+    { value: 12, suffix: "h", label: "Lasting wear" },
+  ];
 
   useEffect(() => {
     const section = sectionRef.current;

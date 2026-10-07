@@ -13,6 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { BrandLogo } from "@/components/brand/brand-logo";
 import { Container } from "@/components/layout/container";
 import { siteConfig } from "@/config/site";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
@@ -37,9 +38,8 @@ export function SiteHeader() {
       )}
     >
       <Container className="flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-baseline gap-1.5">
-          <span className="font-heading text-2xl font-semibold">7</span>
-          <span className="text-sm font-medium tracking-[0.35em] uppercase">Seven</span>
+        <Link href="/" aria-label={`${siteConfig.name} home`} className="flex items-center">
+          <BrandLogo priority className="h-5 md:h-6" />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">

@@ -33,7 +33,7 @@ export function PerfumeCard({ perfume }: { perfume: Perfume }) {
         </div>
       </Link>
 
-      <CardContent className="flex flex-1 flex-col gap-2 pt-4">
+      <CardContent className="flex flex-1 flex-col gap-2 pt-4 pb-5">
         <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
           <span className="flex items-center gap-2">
             <RatingStars rating={perfume.rating} />
@@ -53,7 +53,7 @@ export function PerfumeCard({ perfume }: { perfume: Perfume }) {
         </p>
       </CardContent>
 
-      <CardFooter className="justify-between gap-2 border-t py-4">
+      <CardFooter className="justify-between gap-3 border-t px-4 py-4 sm:px-5">
         <span className="text-lg font-semibold">{formatPrice(perfume.price)}</span>
         <AddToCartButton perfume={perfume} size="sm" className="w-32" />
       </CardFooter>
