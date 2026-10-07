@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750"><defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5a3a22"/><stop offset="1" stop-color="#8b5a2b"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="750" fill="#f7f7f5"/>
+  <ellipse cx="300" cy="630" rx="230" ry="20" fill="#000" opacity="0.08"/>
+  <rect x="70" y="250" width="220" height="380" rx="8" fill="#111"/>
+  <rect x="70" y="250" width="220" height="40" fill="#222"/>
+  <text x="180" y="450" font-family="Georgia, serif" font-size="64" text-anchor="middle" fill="#d4af37">7</text>
+  <text x="180" y="490" font-family="Arial, sans-serif" font-size="16" letter-spacing="8" text-anchor="middle" fill="#fff">SEVEN</text>
+  <rect x="354" y="250" width="54" height="50" rx="8" fill="#d4af37"/>
+  <rect x="345" y="294" width="72" height="30" rx="6" fill="#111"/>
+  <rect x="290" y="318" width="182" height="312" rx="36" fill="url(#g)"/>
+  <rect x="306" y="336" width="36" height="276" rx="18" fill="url(#shine)"/>
+  <rect x="321" y="420" width="120" height="84" rx="6" fill="#fff" opacity="0.92"/>
+  <text x="381" y="462" font-family="Georgia, serif" font-size="32" text-anchor="middle" fill="#111">7</text>
+  <text x="381" y="488.88" font-family="Arial, sans-serif" font-size="10.24" letter-spacing="6" text-anchor="middle" fill="#111">SEVEN</text>
+</svg>
