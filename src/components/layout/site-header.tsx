@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/sheet";
 import { Container } from "@/components/layout/container";
 import { siteConfig } from "@/config/site";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { CartSheet } from "@/features/cart/components/cart-sheet";
 import { cn } from "@/lib/utils";
 
@@ -54,6 +55,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <CartSheet />
 
           <Sheet>

@@ -7,6 +7,7 @@ import Autoplay from "embla-carousel-autoplay";
 
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/layout/section-heading";
+import { Reveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -43,9 +44,11 @@ export function PerfumeCarousel({ perfumes }: { perfumes: Perfume[] }) {
   }, [api]);
 
   return (
-    <section id="collection" className="scroll-mt-16 bg-muted/50 py-14 md:py-20">
+    <section id="collection" className="relative scroll-mt-16 overflow-hidden bg-[linear-gradient(180deg,var(--blush)_0%,color-mix(in_oklch,var(--blush)_45%,var(--background))_60%,var(--background)_100%)] py-14 md:py-20">
       <Container>
-        <SectionHeading eyebrow="The Collection" title="Featured signatures" />
+        <Reveal>
+          <SectionHeading eyebrow="The Collection" title="Featured signatures" />
+        </Reveal>
 
         {/* Side padding holds the arrows, so they never sit outside the page. */}
         <div className="relative px-11 md:px-16">

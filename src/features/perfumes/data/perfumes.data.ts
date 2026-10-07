@@ -8,7 +8,7 @@ const views = [
   { file: "notes.svg", label: "with its key notes" },
   { file: "2.svg", label: "close-up" },
   { file: "3.svg", label: "with gift box" },
-  { file: "4.svg", label: "cap and label detail" },
+  { file: "4.svg", label: "spraying" },
 ];
 
 function gallery(slug: string, name: string): PerfumeImage[] {
@@ -41,6 +41,8 @@ export const perfumes: Perfume[] = [
     stock: 18,
     concentration: "Eau de Parfum",
     gender: "Men",
+    family: "woody",
+    tint: "#3d3d3d",
     images: gallery("noir-absolu", "7 Seven Store"),
     notes: [
       { name: "Bergamot", family: "citrus", layer: "top" },
@@ -69,6 +71,8 @@ export const perfumes: Perfume[] = [
     stock: 24,
     concentration: "Eau de Parfum",
     gender: "Women",
+    family: "floral",
+    tint: "#e79aaa",
     images: gallery("rose-eternelle", "Bergamot"),
     notes: [
       { name: "Lychee", family: "fruity", layer: "top" },
@@ -97,6 +101,8 @@ export const perfumes: Perfume[] = [
     stock: 6,
     concentration: "Parfum",
     gender: "Unisex",
+    family: "woody",
+    tint: "#8b5a2b",
     images: gallery("oud-royale", "Lychee"),
     notes: [
       { name: "Saffron", family: "spicy", layer: "top" },
@@ -124,6 +130,8 @@ export const perfumes: Perfume[] = [
     stock: 40,
     concentration: "Eau de Toilette",
     gender: "Unisex",
+    family: "fresh",
+    tint: "#f6b93b",
     images: gallery("citrus-riviera", "Saffron"),
     notes: [
       { name: "Lemon", family: "citrus", layer: "top" },
@@ -151,6 +159,8 @@ export const perfumes: Perfume[] = [
     stock: 32,
     concentration: "Eau de Toilette",
     gender: "Men",
+    family: "fresh",
+    tint: "#5fa8d3",
     images: gallery("ocean-breeze", "Lemon"),
     notes: [
       { name: "Marine", family: "fresh", layer: "top" },
@@ -178,6 +188,8 @@ export const perfumes: Perfume[] = [
     stock: 12,
     concentration: "Eau de Parfum",
     gender: "Women",
+    family: "amber",
+    tint: "#c0622f",
     images: gallery("velvet-amber", "Marine"),
     notes: [
       { name: "Cinnamon", family: "spicy", layer: "top" },
@@ -205,6 +217,8 @@ export const perfumes: Perfume[] = [
     stock: 0,
     concentration: "Eau de Parfum",
     gender: "Unisex",
+    family: "floral",
+    tint: "#cfc8b8",
     images: gallery("white-musk", "Cinnamon"),
     notes: [
       { name: "Pear", family: "fruity", layer: "top" },
@@ -231,6 +245,8 @@ export const perfumes: Perfume[] = [
     stock: 9,
     concentration: "Eau de Parfum",
     gender: "Women",
+    family: "floral",
+    tint: "#7b6cf6",
     images: gallery("midnight-iris", "Pear"),
     notes: [
       { name: "Blackcurrant", family: "fruity", layer: "top" },

@@ -11,6 +11,8 @@ export type NoteFamily =
 
 export type NoteLayer = "top" | "heart" | "base";
 
+export type FragranceFamily = "floral" | "woody" | "fresh" | "amber";
+
 export interface FragranceNote {
   name: string;
   family: NoteFamily;
@@ -47,6 +49,9 @@ export interface Perfume {
   stock: number;
   concentration: "Eau de Parfum" | "Eau de Toilette" | "Parfum" | "Attar";
   gender: "Men" | "Women" | "Unisex";
+  family: FragranceFamily;
+  /** Brand colour of the scent, used for page tints and accents. */
+  tint: string;
   /** First image is the cover used on cards, carousel and cart. */
   images: PerfumeImage[];
   notes: FragranceNote[];

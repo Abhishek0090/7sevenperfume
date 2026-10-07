@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { ScrollProgress } from "@/components/motion/scroll-progress";
+import { ThemeProvider, themeInitScript } from "@/components/theme/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { siteConfig } from "@/config/site";
 import { CartProvider } from "@/features/cart/store/cart-context";
@@ -37,15 +39,23 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full scroll-smooth antialiased`}
+      // themeInitScript adds the "dark" class before React hydrates.
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="flex min-h-full flex-col">
-        <TooltipProvider>
-          <CartProvider>
-            <SiteHeader />
-            <main className="flex-1">{children}</main>
-            <SiteFooter />
-          </CartProvider>
-        </TooltipProvider>
+        <ThemeProvider>
+          <TooltipProvider>
+            <CartProvider>
+              <ScrollProgress />
+              <SiteHeader />
+              <main className="flex-1">{children}</main>
+              <SiteFooter />
+            </CartProvider>
+          </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

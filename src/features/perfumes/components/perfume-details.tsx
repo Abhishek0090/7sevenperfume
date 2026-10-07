@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ChevronLeftIcon } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
+import { Reveal } from "@/components/motion/reveal";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { CheckoutPanel } from "@/features/checkout/components/checkout-panel";
@@ -14,7 +15,12 @@ import { StockBadge } from "./stock-badge";
 
 export function PerfumeDetails({ perfume }: { perfume: Perfume }) {
   return (
-    <section>
+    <section
+      className="relative overflow-hidden"
+      style={{
+        background: `radial-gradient(ellipse at 15% 0%, color-mix(in oklch, ${perfume.tint} 28%, transparent), transparent 55%), radial-gradient(ellipse at 100% 30%, color-mix(in oklch, ${perfume.tint} 16%, transparent), transparent 50%)`,
+      }}
+    >
       <Container className="pt-6 pb-14 md:pt-8 md:pb-20">
         <Link
           href="/#perfumes"
@@ -26,9 +32,9 @@ export function PerfumeDetails({ perfume }: { perfume: Perfume }) {
 
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
           {/* Left: image gallery */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
+          <Reveal variant="scale" className="lg:sticky lg:top-24 lg:self-start">
             <PerfumeGallery images={perfume.images} />
-          </div>
+          </Reveal>
 
           {/* Right: details */}
           <div className="flex flex-col gap-8">

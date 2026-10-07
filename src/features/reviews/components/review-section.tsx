@@ -1,5 +1,6 @@
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/layout/section-heading";
+import { Reveal } from "@/components/motion/reveal";
 import type { RatingSummary, Review } from "../types";
 import { RatingStars } from "./rating-stars";
 import { ReviewCard } from "./review-card";
@@ -13,9 +14,11 @@ export function ReviewSection({ reviews, summary }: ReviewSectionProps) {
   const maxCount = Math.max(...summary.distribution, 1);
 
   return (
-    <section id="reviews" className="scroll-mt-16 border-t bg-muted/30 py-14 md:py-20">
+    <section id="reviews" className="scroll-mt-16 border-t bg-sand/50 py-14 md:py-20">
       <Container>
-        <SectionHeading eyebrow="Reviews" title="What customers say" />
+        <Reveal>
+          <SectionHeading eyebrow="Reviews" title="What customers say" />
+        </Reveal>
 
         <div className="grid gap-8 lg:grid-cols-[300px_1fr] lg:gap-12">
           <aside className="space-y-6 rounded-2xl border bg-background p-6 lg:sticky lg:top-24 lg:self-start">
@@ -31,9 +34,9 @@ export function ReviewSection({ reviews, summary }: ReviewSectionProps) {
                 return (
                   <li key={star} className="flex items-center gap-3 text-sm">
                     <span className="w-3 tabular-nums">{star}</span>
-                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-sand">
                       <div
-                        className="h-full rounded-full bg-primary"
+                        className="h-full rounded-full bg-gradient-to-r from-gold to-gold-light"
                         style={{ width: `${(count / maxCount) * 100}%` }}
                       />
                     </div>
@@ -45,8 +48,10 @@ export function ReviewSection({ reviews, summary }: ReviewSectionProps) {
           </aside>
 
           <div className="grid gap-6 md:grid-cols-2">
-            {reviews.map((review) => (
-              <ReviewCard key={review.id} review={review} />
+            {reviews.map((review, i) => (
+              <Reveal key={review.id} delay={(i % 2) * 120}>
+                <ReviewCard review={review} />
+              </Reveal>
             ))}
           </div>
         </div>
