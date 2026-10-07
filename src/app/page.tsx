@@ -1,6 +1,6 @@
 import { BrandStory } from "@/features/home/components/brand-story";
 import { FragranceFamilies } from "@/features/home/components/fragrance-families";
-import { HeroParallax, type HeroStats } from "@/features/home/components/hero-parallax";
+import { HeroParallax, type HeroShade, type HeroStats } from "@/features/home/components/hero-parallax";
 // import { MarqueeBand } from "@/features/home/components/marquee-band";
 import { PerfumeCarousel } from "@/features/perfumes/components/perfume-carousel";
 import { PerfumeGrid } from "@/features/perfumes/components/perfume-grid";
@@ -20,10 +20,14 @@ export default async function HomePage() {
     concentrations: [...new Set(perfumes.map((p) => p.concentration))],
     newest: { name: newest.name, slug: newest.slug },
   };
+  // Colours the hero bottle can be filled with, one per perfume (amber first, as the default).
+  const heroShades: HeroShade[] = [...perfumes]
+    .sort((a, b) => (a.family === "amber" ? -1 : b.family === "amber" ? 1 : 0))
+    .map((p) => ({ name: p.name, slug: p.slug, tint: p.tint }));
 
   return (
     <>
-      <HeroParallax stats={heroStats} />
+      <HeroParallax stats={heroStats} shades={heroShades} />
       {/* Ticker band disabled for now. Restore by uncommenting this line and the import above. */}
       {/* <MarqueeBand /> */}
       <PerfumeCarousel perfumes={featured} />

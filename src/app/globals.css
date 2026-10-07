@@ -13,6 +13,7 @@
   --animate-marquee: marquee 40s linear infinite;
   --animate-float: float 9s ease-in-out infinite;
   --animate-shimmer: shimmer 3s linear infinite;
+  --animate-hero-rise: hero-rise 1s cubic-bezier(0.22, 1, 0.36, 1) both;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
@@ -157,6 +158,13 @@
     @apply font-sans;
   }
 }
+/* Registered so the hero bottle colour can transition smoothly between perfumes. */
+@property --liquid {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #e9b76f;
+}
+
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -171,6 +179,11 @@
 @keyframes logo-letter-in {
   from { opacity: 0; transform: translateX(-40px); filter: blur(6px); }
   to { opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes hero-rise {
+  from { opacity: 0; transform: translate3d(0, 40px, 0) scale(0.96); }
+  to { opacity: 1; transform: none; }
 }
 
 @keyframes logo-glow {
@@ -204,5 +217,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] { opacity: 1; transform: none; filter: none; transition: none; }
-  .animate-marquee, .animate-float, .animate-shimmer, .animate-logo-letter, .animate-logo-glow { animation: none !important; opacity: 1 !important; }
+  .animate-marquee, .animate-float, .animate-shimmer, .animate-logo-letter, .animate-logo-glow, .animate-hero-rise { animation: none !important; opacity: 1 !important; }
 }

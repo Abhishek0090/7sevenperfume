@@ -66,7 +66,9 @@ export function SiteHeader() {
             </SheetTrigger>
             <SheetContent side="right">
               <SheetHeader>
-                <SheetTitle>{siteConfig.name}</SheetTitle>
+                <SheetTitle>
+                  <BrandLogo className="h-5" />
+                </SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col gap-1 px-4">
                 {siteConfig.nav.map((item) => (
