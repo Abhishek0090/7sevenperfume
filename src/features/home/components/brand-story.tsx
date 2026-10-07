@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/motion/reveal";
+import { perfumeImage } from "@/lib/perfume-image";
 import type { HeroStats } from "./hero-parallax";
 
 /** Counts a number up from 0 the first time it scrolls into view. */
@@ -130,14 +131,14 @@ export function BrandStory({ stats }: { stats: HeroStats }) {
             className="absolute inset-y-6 left-0 w-3/5 overflow-hidden rounded-2xl shadow-2xl ring-1 ring-gold/30 will-change-transform"
             style={{ transform: "rotate(-4deg)" }}
           >
-            <Image src="/images/perfumes/oud-royale/notes.svg" alt="" fill sizes="300px" className="object-cover" />
+            <Image src={perfumeImage("oud-royale", "notes.svg")} alt="" fill sizes="300px" className="object-cover" />
           </div>
           <div
             ref={frontCardRef}
             className="absolute inset-y-0 right-0 w-3/5 overflow-hidden rounded-2xl shadow-2xl ring-1 ring-gold/30 will-change-transform"
             style={{ transform: "rotate(3deg)" }}
           >
-            <Image src="/images/perfumes/rose-eternelle/notes.svg" alt="" fill sizes="300px" className="object-cover" />
+            <Image src={perfumeImage("rose-eternelle", "notes.svg")} alt="" fill sizes="300px" className="object-cover" />
           </div>
         </div>
       </Container>

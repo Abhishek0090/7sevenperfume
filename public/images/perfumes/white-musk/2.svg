@@ -2,35 +2,58 @@
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbfaf6"/><stop offset="1" stop-color="#ece8de"/></linearGradient>
     <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
     <linearGradient id="box" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2b2b2b"/><stop offset="1" stop-color="#0d0d0d"/></linearGradient>
-    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0.55"/><stop offset="0.5" stop-color="#fff" stop-opacity="0.12"/><stop offset="1" stop-color="#fff" stop-opacity="0.4"/></linearGradient>
-    <linearGradient id="liquid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5f5f0"/><stop offset="1" stop-color="#dcdcd2"/></linearGradient>
-    <linearGradient id="cap" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a8a80"/><stop offset="0.35" stop-color="#ffffff" stop-opacity="0.9"/><stop offset="0.55" stop-color="#8a8a80"/><stop offset="1" stop-color="#2a2a2a"/></linearGradient>
-    <linearGradient id="collar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8f7a4a"/><stop offset="0.4" stop-color="#f4e3b0"/><stop offset="1" stop-color="#6e5a30"/></linearGradient>
+    <linearGradient id="fl-liquid" x1="0" y1="0" x2="0.35" y2="1"><stop offset="0" stop-color="#f5f5f0"/><stop offset="0.55" stop-color="#dcdcd2"/><stop offset="1" stop-color="#dcdcd2" stop-opacity="0.95"/></linearGradient>
+    <linearGradient id="fl-base" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dcdcd2" stop-opacity="0.95"/><stop offset="1" stop-color="#f5f5f0" stop-opacity="0.6"/></linearGradient>
+    <linearGradient id="fl-glass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0.5"/><stop offset="0.12" stop-color="#fff" stop-opacity="0.08"/><stop offset="0.85" stop-color="#fff" stop-opacity="0.05"/><stop offset="1" stop-color="#fff" stop-opacity="0.38"/></linearGradient>
+    <linearGradient id="fl-shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="fl-foil" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3cf"/><stop offset="0.35" stop-color="#e2c27f"/><stop offset="0.6" stop-color="#fff0c4"/><stop offset="1" stop-color="#c9a05a"/></linearGradient>
+    <linearGradient id="cap-gold" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5e4520"/><stop offset="0.16" stop-color="#d9bd7f"/><stop offset="0.28" stop-color="#fff4d2"/><stop offset="0.45" stop-color="#b8935a"/><stop offset="0.68" stop-color="#f0d9a2"/><stop offset="0.86" stop-color="#9a7a43"/><stop offset="1" stop-color="#4e391a"/></linearGradient>
+    <linearGradient id="cap-top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff8e2"/><stop offset="1" stop-color="#c9a86a"/></linearGradient>
     <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
     <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <clipPath id="fl-body"><rect x="10" y="36" width="380" height="484" rx="34"/></clipPath>
     <filter id="soft"><feGaussianBlur stdDeviation="3"/></filter>
     <filter id="blur18"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="fl-blur" x="-30%" y="-200%" width="160%" height="500%"><feGaussianBlur stdDeviation="14"/></filter>
   </defs>
   <rect width="600" height="750" fill="url(#bg)"/>
   <circle cx="300" cy="420" r="260" fill="url(#glow)"/>
   
-  <ellipse cx="300" cy="696" rx="192" ry="12" fill="#000" opacity="0.22" filter="url(#soft)"/>
-  <rect x="245.6" y="182" width="108.80000000000001" height="74" rx="10" fill="url(#cap)"/>
-  <rect x="245.6" y="182" width="108.80000000000001" height="10" rx="5" fill="#fff" opacity="0.35"/>
-  <rect x="236" y="254" width="128" height="22" rx="4" fill="url(#collar)"/>
-  <rect x="140" y="274" width="320" height="416" rx="51.2" fill="url(#liquid)" opacity="0.18"/>
-  <clipPath id="body"><rect x="140" y="274" width="320" height="416" rx="51.2"/></clipPath>
-  <g clip-path="url(#body)">
-    <rect x="140" y="365.52" width="320" height="416" fill="url(#liquid)"/>
-    <ellipse cx="300" cy="365.52" rx="160" ry="7" fill="#fff" opacity="0.35"/>
-    <rect x="140" y="274" width="320" height="416" fill="url(#glass)"/>
-    <rect x="165.6" y="286" width="44.800000000000004" height="392" rx="22.400000000000002" fill="url(#shine)"/>
-    <rect x="402.4" y="298" width="16" height="228.8" rx="4" fill="#fff" opacity="0.45"/>
+  <g transform="translate(131.58 252.11) scale(0.8421)">
+    <ellipse cx="200" cy="540" rx="185" ry="26" fill="url(#fl-liquid)" opacity="0.35" filter="url(#fl-blur)"/>
+    <ellipse cx="200" cy="524" rx="150" ry="9" fill="#000" opacity="0.35" filter="url(#soft)"/>
+    <rect x="162" y="4" width="76" height="44" rx="6" fill="#fff" opacity="0.18" stroke="#fff" stroke-opacity="0.6" stroke-width="2"/>
+    <rect x="10" y="36" width="380" height="484" rx="34" fill="#fff" opacity="0.08"/>
+    <g clip-path="url(#fl-body)">
+      <rect x="34" y="118" width="332" height="336" rx="18" fill="url(#fl-liquid)"/>
+      <ellipse cx="200" cy="118" rx="166" ry="6" fill="#fff" opacity="0.4"/>
+      <rect x="10" y="456" width="380" height="64" fill="url(#fl-base)"/>
+      <rect x="10" y="456" width="380" height="2" fill="#fff" opacity="0.45"/>
+      <rect x="10" y="36" width="380" height="484" fill="url(#fl-glass)"/>
+      <rect x="24" y="54" width="20" height="452" rx="10" fill="url(#fl-shine)"/>
+      <rect x="52" y="70" width="5" height="380" rx="2.5" fill="#fff" opacity="0.35"/>
+      <rect x="330" y="66" width="34" height="370" rx="17" fill="#fff" opacity="0.12"/>
+      <path d="M60 52 Q200 40 340 52" stroke="#fff" stroke-opacity="0.55" stroke-width="3" fill="none"/>
+    </g>
+    <rect x="10" y="36" width="380" height="484" rx="34" fill="none" stroke="#fff" stroke-opacity="0.75" stroke-width="3"/>
+    <rect x="34" y="118" width="332" height="336" rx="18" fill="none" stroke="#fff" stroke-opacity="0.22" stroke-width="1.5"/>
+    <g transform="translate(200 281) scale(0.78) translate(-200 -281)">
+    <rect x="72" y="206" width="256" height="150" rx="8" fill="#0d0a07" opacity="0.62"/>
+    <rect x="80" y="214" width="240" height="134" rx="5" fill="none" stroke="url(#fl-foil)" stroke-opacity="0.7" stroke-width="1.2"/>
+    <g transform="translate(95 236) scale(0.25)" fill="url(#fl-foil)"><path d="M 123 1 L 1 1 L 1 14 L 102 15 L 18 137 L 36 137 L 123 11 Z"/><path d="M 186 1 L 186 15 L 297 15 L 298 1 Z"/><path d="M 186 61 L 187 76 L 297 76 L 297 61 Z"/><path d="M 186 122 L 187 137 L 297 137 L 297 122 Z"/><path d="M 346 1 L 411 135 L 413 137 L 430 137 L 495 1 L 477 1 L 426 110 L 421 118 L 365 2 Z"/><path d="M 531 1 L 591 84 L 591 136 L 607 137 L 607 79 L 552 2 Z"/><path d="M 667 1 L 648 1 L 610 53 L 610 55 L 619 67 Z"/><path d="M 708 1 L 708 136 L 724 136 L 724 27 L 726 26 L 820 137 L 837 137 L 837 1 L 821 1 L 820 112 L 726 1 Z"/></g>
+    <rect x="150" y="290" width="100" height="1.2" fill="url(#fl-foil)"/>
+    <text x="200" y="314" text-anchor="middle" font-size="13" letter-spacing="7" fill="#f3dca4" font-family="Jost, Arial, sans-serif">EAU DE PARFUM</text>
+    <text x="200" y="334" text-anchor="middle" font-size="10" letter-spacing="4" fill="#e8d3a2" opacity="0.85" font-family="Jost, Arial, sans-serif">50 ML · 1.7 FL.OZ</text>
+    </g>
+    <g transform="translate(100 -126)">
+      <path d="M44 22 L60 6 H140 L156 22 V122 H44 Z" fill="url(#cap-gold)"/>
+      <path d="M60 6 H140 L156 22 H44 Z" fill="url(#cap-top)"/>
+      <rect x="70" y="24" width="3" height="96" fill="#fff" opacity="0.45"/>
+      <rect x="128" y="24" width="2" height="96" fill="#000" opacity="0.18"/>
+      <rect x="44" y="118" width="112" height="4" fill="#000" opacity="0.2"/>
+      <rect x="54" y="122" width="92" height="10" rx="2" fill="#1d1813"/>
+      <rect x="60" y="132" width="80" height="36" rx="4" fill="url(#cap-gold)"/>
+      <rect x="60" y="132" width="80" height="4" fill="#000" opacity="0.25"/>
+    </g>
   </g>
-  <rect x="140" y="274" width="320" height="416" rx="51.2" fill="none" stroke="#fff" stroke-opacity="0.7" stroke-width="2.5"/>
-  <rect x="194.39999999999998" y="448.72" width="211.20000000000002" height="141.44" rx="4" fill="#fffdf8" opacity="0.96"/>
-  <rect x="199.39999999999998" y="453.72" width="201.20000000000002" height="131.44" rx="2" fill="none" stroke="#b8975a" stroke-width="1.2"/>
-  <text x="300" y="523.6" font-family="Georgia, serif" font-size="64" text-anchor="middle" fill="#111">7</text>
-  <text x="300" y="552.72" font-family="Arial, sans-serif" font-size="17.6" letter-spacing="8" text-anchor="middle" fill="#111">SEVEN</text>
-  <text x="300" y="573.52" font-family="Arial, sans-serif" font-size="11.200000000000001" letter-spacing="2" text-anchor="middle" fill="#8a7a5a">EAU DE PARFUM</text>
 </svg>

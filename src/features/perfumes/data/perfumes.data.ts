@@ -1,3 +1,4 @@
+import { perfumeImage } from "@/lib/perfume-image";
 import type { Dealer, Perfume, PerfumeImage } from "../types";
 
 // Mock data. Replace with a database query inside perfume.service.ts.
@@ -12,7 +13,7 @@ const views = [
 ];
 
 function gallery(slug: string, name: string): PerfumeImage[] {
-  return views.map((view) => ({ src: `/images/perfumes/${slug}/${view.file}`, alt: `${name}, ${view.label}` }));
+  return views.map((view) => ({ src: perfumeImage(slug, view.file), alt: `${name}, ${view.label}` }));
 }
 
 const mainDealer: Dealer = {
