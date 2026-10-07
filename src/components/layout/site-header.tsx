@@ -34,7 +34,8 @@ export function SiteHeader() {
     <header
       className={cn(
         "sticky top-0 z-50 w-full transition-all",
-        scrolled ? "border-b bg-background/85 backdrop-blur-md" : "bg-background",
+        // Near-solid background instead of backdrop-blur, which repaints on every scroll frame.
+        scrolled ? "border-b bg-background/95" : "bg-background",
       )}
     >
       <Container className="flex h-16 items-center justify-between">

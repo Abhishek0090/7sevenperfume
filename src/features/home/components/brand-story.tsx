@@ -48,6 +48,8 @@ function CountUp({ value, suffix, decimals = 0 }: { value: number; suffix: strin
 /** Dark storytelling section with parallax image stack and animated stats. */
 export function BrandStory({ stats }: { stats: HeroStats }) {
   const sectionRef = useRef<HTMLElement>(null);
+  const backCardRef = useRef<HTMLDivElement>(null);
+  const frontCardRef = useRef<HTMLDivElement>(null);
   // Same catalogue figures as the hero, so the page never contradicts itself.
   const STATS = [
     { value: stats.perfumeCount, suffix: "", label: "Signature scents" },
@@ -58,28 +60,39 @@ export function BrandStory({ stats }: { stats: HeroStats }) {
 
   useEffect(() => {
     const section = sectionRef.current;
-    if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const back = backCardRef.current;
+    const front = frontCardRef.current;
+    if (!section || !back || !front || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let frame = 0;
+    let visible = false;
+    // Transforms are written straight to the two cards (not via a variable on the section),
+    // and only while the section is on screen.
     const update = () => {
       frame = 0;
       const rect = section.getBoundingClientRect();
       // -1 when the section enters from the bottom, 1 when it leaves at the top.
       const p = Math.max(-1, Math.min(1, (window.innerHeight / 2 - (rect.top + rect.height / 2)) / window.innerHeight));
-      section.style.setProperty("--p", String(p));
+      back.style.transform = `translate3d(0, ${p * -40}px, 0) rotate(-4deg)`;
+      front.style.transform = `translate3d(0, ${p * 50}px, 0) rotate(3deg)`;
     };
     const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(update);
+      if (visible && !frame) frame = requestAnimationFrame(update);
     };
-    update();
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) onScroll();
+    });
+    observer.observe(section);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
+      observer.disconnect();
       window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(frame);
     };
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden bg-noir py-20 text-[#f5ede2] [--p:0] md:py-28">
+    <section ref={sectionRef} className="relative overflow-hidden bg-noir py-20 text-[#f5ede2] md:py-28">
       <div
         aria-hidden
         className="absolute -top-40 -right-40 size-[40rem] rounded-full bg-[radial-gradient(circle,rgba(184,147,90,0.25),transparent_65%)]"
@@ -113,14 +126,16 @@ export function BrandStory({ stats }: { stats: HeroStats }) {
 
         <div className="relative mx-auto aspect-[4/5] w-full max-w-md">
           <div
-            className="absolute inset-y-6 left-0 w-3/5 overflow-hidden rounded-2xl shadow-2xl ring-1 ring-gold/30"
-            style={{ transform: "translate3d(0, calc(var(--p) * -40px), 0) rotate(-4deg)" }}
+            ref={backCardRef}
+            className="absolute inset-y-6 left-0 w-3/5 overflow-hidden rounded-2xl shadow-2xl ring-1 ring-gold/30 will-change-transform"
+            style={{ transform: "rotate(-4deg)" }}
           >
             <Image src="/images/perfumes/oud-royale/notes.svg" alt="" fill sizes="300px" className="object-cover" />
           </div>
           <div
-            className="absolute inset-y-0 right-0 w-3/5 overflow-hidden rounded-2xl shadow-2xl ring-1 ring-gold/30"
-            style={{ transform: "translate3d(0, calc(var(--p) * 50px), 0) rotate(3deg)" }}
+            ref={frontCardRef}
+            className="absolute inset-y-0 right-0 w-3/5 overflow-hidden rounded-2xl shadow-2xl ring-1 ring-gold/30 will-change-transform"
+            style={{ transform: "rotate(3deg)" }}
           >
             <Image src="/images/perfumes/rose-eternelle/notes.svg" alt="" fill sizes="300px" className="object-cover" />
           </div>

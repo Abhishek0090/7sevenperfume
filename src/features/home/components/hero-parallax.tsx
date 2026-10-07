@@ -36,10 +36,10 @@ const LETTER_DELAY_MS = 160;
 const LETTER_DURATION_MS = 700;
 const GLOW_DELAY_MS = 400 + LOGO_LETTERS.length * LETTER_DELAY_MS + LETTER_DURATION_MS;
 
-/** Scroll progress helpers as CSS expressions (0..1), driven by --p. */
-const range = (from: number, to: number) => `clamp(0, (var(--p) - ${from}) / ${to - from}, 1)`;
-/** Ease-out: t * (2 - t). */
-const easeOut = (t: string) => `(${t} * (2 - ${t}))`;
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+const easeOut = (t: number) => t * (2 - t);
+/** How quickly the animation catches up with the scroll position (per 60fps frame). Lower = silkier. */
+const SMOOTHING = 0.14;
 
 /** Metallic cap with gold collar. */
 function BottleCap() {
@@ -132,12 +132,19 @@ function BottleBody() {
  * 2. Scrolling: the cap drifts to the left, the bottle to the right.
  * 3. The hero content (logo, tagline, buttons, facts) fades in between them.
  *
- * Performance: one rAF-throttled listener writes `--p` (0..1); everything else is CSS
- * transforms and opacity, with no re-renders.
+ * Performance: scroll progress is eased toward the scroll position (so mouse-wheel steps glide)
+ * and written straight to the few moving elements as GPU-friendly transform/opacity. Nothing is
+ * set on the section itself, so the rest of the hero is never restyled while scrolling.
  */
 export function HeroParallax({ stats, shades }: { stats: HeroStats; shades: HeroShade[] }) {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const capRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const pickerRef = useRef<HTMLDivElement>(null);
+  const hintRef = useRef<HTMLDivElement>(null);
+  const letterRefs = useRef<(SVGGElement | null)[]>([]);
   const [shadeIndex, setShadeIndex] = useState(0);
   const [picked, setPicked] = useState(false);
   const shade = shades[shadeIndex] ?? shades[0];
@@ -153,38 +160,102 @@ export function HeroParallax({ stats, shades }: { stats: HeroStats; shades: Hero
   useEffect(() => {
     const section = sectionRef.current;
     const stage = stageRef.current;
-    if (!section || !stage) return;
+    const cap = capRef.current;
+    const body = bodyRef.current;
+    const content = contentRef.current;
+    if (!section || !stage || !cap || !body || !content) return;
+
+    let wide = false;
+    let sectionTop = 0;
+    let stickyTop = 0;
+    let scrollable = 1;
+    let revealed = false;
+
+    /** Cache layout values so the per-frame work never reads layout. */
+    const measure = () => {
+      wide = window.matchMedia("(min-width: 768px)").matches;
+      stickyTop = parseFloat(getComputedStyle(stage).top) || 0;
+      sectionTop = section.getBoundingClientRect().top + window.scrollY;
+      scrollable = Math.max(section.offsetHeight - stage.offsetHeight, 1);
+    };
+    const readProgress = () => clamp01((window.scrollY + stickyTop - sectionTop) / scrollable);
+
+    /** Write the scene for progress p (0 = closed bottle, 1 = content shown). */
+    const apply = (p: number) => {
+      const open = easeOut(clamp01(p / OPEN_END));
+      const side = window.innerWidth * (wide ? 0.3 : 0.52);
+      const vh = window.innerHeight / 100;
+      // Cap and bottle stay fully visible on wide screens; on phones they fade back behind the content.
+      const fade = String(1 - (1 - (wide ? 1 : 0.12)) * open);
+
+      cap.style.transform = `translate3d(${-side * open}px, ${-8 * vh * open}px, 0) rotate(${-22 * open}deg) scale(${1 - 0.3 * open})`;
+      cap.style.opacity = fade;
+      body.style.transform = `translate3d(${side * open}px, ${6 * vh * open}px, 0) rotate(${8 * open}deg) scale(${1 - 0.42 * open})`;
+      body.style.opacity = fade;
+
+      const c = clamp01((p - CONTENT_START) / (CONTENT_END - CONTENT_START));
+      content.style.opacity = String(c);
+      content.style.transform = `translate3d(0, ${(1 - c) * 30}px, 0)`;
+      letterRefs.current.forEach((g, i) => {
+        if (!g) return;
+        const t = clamp01((p - CONTENT_START - i * 0.04) / 0.14);
+        g.style.opacity = String(t);
+        g.style.transform = `translateX(${(1 - t) * -30}px)`;
+      });
+      if (pickerRef.current) pickerRef.current.style.opacity = String(1 - clamp01(p / 0.12));
+      if (hintRef.current) hintRef.current.style.opacity = String(1 - clamp01(p / 0.08));
+
+      const nowRevealed = p >= CONTENT_END - 0.05;
+      if (nowRevealed !== revealed) {
+        revealed = nowRevealed;
+        section.dataset.revealed = String(revealed);
+      }
+    };
+
+    measure();
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       section.dataset.static = "true";
+      apply(1);
       return;
     }
 
+    let current = readProgress();
     let frame = 0;
-    const update = () => {
-      frame = 0;
-      const scrollable = section.offsetHeight - stage.offsetHeight;
-      // The stage pins below the sticky header, so progress starts when the section reaches that offset.
-      const stickyTop = parseFloat(getComputedStyle(stage).top) || 0;
-      const p = Math.min(1, Math.max(0, (stickyTop - section.getBoundingClientRect().top) / Math.max(scrollable, 1)));
-      section.style.setProperty("--p", p.toFixed(4));
-      section.dataset.revealed = String(p >= CONTENT_END - 0.05);
+    let last = performance.now();
+    apply(current);
+
+    // Ease the drawn progress toward the scroll position, independent of frame rate.
+    const tick = (now: number) => {
+      const dt = Math.min(now - last, 64);
+      last = now;
+      const target = readProgress();
+      const k = 1 - Math.pow(1 - SMOOTHING, dt / 16.7);
+      current += (target - current) * k;
+      if (Math.abs(target - current) < 0.0004) current = target;
+      apply(current);
+      frame = current === target ? 0 : requestAnimationFrame(tick);
     };
     const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(update);
+      if (!frame) {
+        last = performance.now();
+        frame = requestAnimationFrame(tick);
+      }
+    };
+    const onResize = () => {
+      measure();
+      apply(current);
+      onScroll();
     };
 
-    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    window.addEventListener("resize", onResize);
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", onResize);
       cancelAnimationFrame(frame);
     };
   }, []);
 
-  const open = easeOut(range(0, OPEN_END));
-  const content = range(CONTENT_START, CONTENT_END);
 
   const facts = [
     { value: String(stats.perfumeCount), label: "Signature scents" },
@@ -205,59 +276,53 @@ export function HeroParallax({ stats, shades }: { stats: HeroStats; shades: Hero
     <section
       id="top"
       ref={sectionRef}
-      // --side: how far the cap/bottle travel sideways; --rest: their opacity once open (fainter on phones).
-      style={{ ["--liquid" as string]: shade?.tint }}
-      className="group/hero relative h-[240svh] transition-[--liquid] duration-1000 ease-in-out bg-background [--p:0] [--rest:0.12] [--side:52vw] data-[static=true]:h-auto data-[static=true]:[--p:1] md:[--rest:1] md:[--side:30vw]"
+      className="group/hero relative h-[240svh] bg-background data-[static=true]:h-auto"
     >
       <div
         ref={stageRef}
-        className="sticky top-16 h-[calc(100svh-4rem)] overflow-hidden group-data-[static=true]/hero:static group-data-[static=true]/hero:min-h-[calc(100svh-4rem)]"
+        className="sticky top-16 h-[calc(100svh-4rem)] overflow-hidden [contain:paint] group-data-[static=true]/hero:static group-data-[static=true]/hero:min-h-[calc(100svh-4rem)]"
       >
-        {/* Spotlight behind the bottle */}
+        {/* The liquid colour lives only on this layer, so colour changes never restyle the rest of the hero. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_45%_55%_at_50%_50%,color-mix(in_oklch,var(--liquid)_28%,transparent),transparent_70%)]"
-        />
+          className="pointer-events-none absolute inset-0 transition-[--liquid] duration-1000 ease-in-out"
+          style={{ ["--liquid" as string]: shade?.tint }}
+        >
+          {/* Spotlight behind the bottle */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_45%_55%_at_50%_50%,color-mix(in_oklch,var(--liquid)_28%,transparent),transparent_70%)]" />
 
-        {/* Bottle: cap and body move apart as the user scrolls */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div
-            className="animate-hero-rise relative w-[min(31svh,56vw)]"
-            // Room for the cap above; the bottle sits a little high to leave space for the colour picker below.
-            style={{ marginTop: "calc(min(31svh, 56vw) * 0.3)", translate: "0 -6svh" }}
-          >
-            {/* Cap: sits on the bottle, then lifts and drifts left */}
+          {/* Bottle: cap and body move apart as the user scrolls */}
+          <div className="absolute inset-0 flex items-center justify-center">
             <div
-              className="absolute bottom-full left-1/2 w-1/2 will-change-transform"
-              style={{
-                transform: `translate(calc(-50% - var(--side) * ${open}), calc(-8svh * ${open})) rotate(calc(-22deg * ${open})) scale(calc(1 - 0.3 * ${open}))`,
-                opacity: `calc(1 - (1 - var(--rest)) * ${open})`,
-                marginBottom: "-2%",
-              }}
+              className="animate-hero-rise relative w-[min(31svh,56vw)]"
+              // Room for the cap above; the bottle sits a little high to leave space for the colour picker below.
+              style={{ marginTop: "calc(min(31svh, 56vw) * 0.3)", translate: "0 -6svh" }}
             >
-              <BottleCap />
-            </div>
-            {/* Body: drifts right and shrinks */}
-            <div
-              className="will-change-transform"
-              style={{
-                transform: `translate(calc(var(--side) * ${open}), calc(6svh * ${open})) rotate(calc(8deg * ${open})) scale(calc(1 - 0.42 * ${open}))`,
-                opacity: `calc(1 - (1 - var(--rest)) * ${open})`,
-              }}
-            >
-              <BottleBody />
+              {/* Cap: sits on the bottle, then lifts and drifts left */}
+              <div
+                ref={capRef}
+                className="absolute bottom-full left-1/2 w-1/2 -translate-x-1/2 will-change-transform"
+                style={{ marginBottom: "-2%" }}
+              >
+                <BottleCap />
+              </div>
+              {/* Body: drifts right and shrinks */}
+              <div ref={bodyRef} className="will-change-transform">
+                <BottleBody />
+              </div>
             </div>
           </div>
         </div>
 
         {/* Hero content, revealed between the cap and the bottle */}
         <div
-          className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-5 text-center group-data-[revealed=true]/hero:pointer-events-auto group-data-[static=true]/hero:pointer-events-auto"
-          style={{ opacity: content, transform: `translateY(calc((1 - ${content}) * 30px))` }}
+          ref={contentRef}
+          className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-5 text-center will-change-[opacity,transform] group-data-[revealed=true]/hero:pointer-events-auto group-data-[static=true]/hero:pointer-events-auto"
+          style={{ opacity: 0 }}
         >
           <Link
             href={`/perfumes/${stats.newest.slug}`}
-            className="group mb-5 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-background/70 py-1 pr-3 pl-1 text-xs backdrop-blur transition-colors hover:border-gold sm:mb-7"
+            className="group mb-5 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-background/85 py-1 pr-3 pl-1 text-xs transition-colors hover:border-gold sm:mb-7"
           >
             <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-medium tracking-wider text-primary-foreground uppercase">
               New
@@ -278,17 +343,20 @@ export function HeroParallax({ stats, shades }: { stats: HeroStats; shades: Hero
               viewBox={LOGO_VIEWBOX}
               className="w-full fill-current text-foreground group-data-[revealed=true]/hero:animate-[logo-glow_1.6s_ease-in-out_1]"
             >
-              {LOGO_LETTERS.map((letter, i) => {
-                // Letters arrive left to right as the content fades in.
-                const t = range(CONTENT_START + i * 0.04, CONTENT_START + i * 0.04 + 0.14);
-                return (
-                  <g key={letter.id} style={{ opacity: t, transform: `translateX(calc((1 - ${t}) * -30px))` }}>
-                    {letter.paths.map((d) => (
-                      <path key={d} d={d} />
-                    ))}
-                  </g>
-                );
-              })}
+              {/* Letters arrive left to right as the content fades in (driven by the scroll effect). */}
+              {LOGO_LETTERS.map((letter, i) => (
+                <g
+                  key={letter.id}
+                  ref={(el) => {
+                    letterRefs.current[i] = el;
+                  }}
+                  style={{ opacity: 0 }}
+                >
+                  {letter.paths.map((d) => (
+                    <path key={d} d={d} />
+                  ))}
+                </g>
+              ))}
             </svg>
           </h1>
 
@@ -302,7 +370,7 @@ export function HeroParallax({ stats, shades }: { stats: HeroStats; shades: Hero
             <Button asChild size="lg" className="h-11 px-6">
               <Link href="#perfumes">Shop the collection</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="h-11 bg-background/70 px-6 backdrop-blur">
+            <Button asChild size="lg" variant="outline" className="h-11 bg-background/85 px-6">
               <Link href="#collection">Featured</Link>
             </Button>
           </div>
@@ -322,8 +390,8 @@ export function HeroParallax({ stats, shades }: { stats: HeroStats; shades: Hero
 
         {/* Colour picker, only before the bottle opens */}
         <div
+          ref={pickerRef}
           className="pointer-events-none absolute inset-x-0 bottom-[4.5rem] z-20 flex flex-col items-center gap-3 px-5 *:pointer-events-auto group-data-[revealed=true]/hero:*:pointer-events-none"
-          style={{ opacity: `calc(1 - ${range(0, 0.12)})` }}
         >
           <div role="radiogroup" aria-label="Perfume colour" className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-5">
             {shades.map((s, i) => (
@@ -353,9 +421,9 @@ export function HeroParallax({ stats, shades }: { stats: HeroStats; shades: Hero
 
         {/* Scroll hint, only before the bottle opens */}
         <div
+          ref={hintRef}
           aria-hidden
           className="pointer-events-none absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1.5 text-[11px] tracking-[0.35em] text-muted-foreground uppercase"
-          style={{ opacity: `calc(1 - ${range(0, 0.08)})` }}
         >
           Scroll to open
           <ArrowDownIcon className="size-4 animate-bounce" />
