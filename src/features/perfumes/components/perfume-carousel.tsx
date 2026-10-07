@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 
 import { Container } from "@/components/layout/container";
@@ -14,59 +14,86 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import { formatPrice } from "@/lib/format";
+import { cn } from "@/lib/utils";
 import type { Perfume } from "../types";
 
+/**
+ * Centered "cascade" carousel: the selected card is raised and full size,
+ * its neighbours sit lower and smaller.
+ */
 export function PerfumeCarousel({ perfumes }: { perfumes: Perfume[] }) {
+  const [api, setApi] = useState<CarouselApi>();
+  const [selected, setSelected] = useState(0);
   const [autoplay] = useState(() =>
     Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true }),
   );
 
-  return (
-    <section id="collection" className="scroll-mt-16 bg-muted/50 py-20 md:py-28">
-      <Container>
-        <Carousel opts={{ align: "start", loop: true }} plugins={[autoplay]}>
-          {/* Arrows sit in the heading row (not outside the track) so nothing overflows the page. */}
-          <SectionHeading eyebrow="The Collection" title="Featured signatures">
-            <div className="flex shrink-0 gap-2">
-              <CarouselPrevious className="static my-0 size-10" />
-              <CarouselNext className="static my-0 size-10" />
-            </div>
-          </SectionHeading>
+  useEffect(() => {
+    if (!api) return;
+    const onSelect = () => setSelected(api.selectedScrollSnap());
+    api.on("select", onSelect);
+    api.on("reInit", onSelect);
+    return () => {
+      api.off("select", onSelect);
+      api.off("reInit", onSelect);
+    };
+  }, [api]);
 
-          <CarouselContent className="-ml-6">
-            {perfumes.map((perfume) => (
-              <CarouselItem key={perfume.id} className="basis-full pl-6 lg:basis-1/2">
-                <div className="grid h-full overflow-hidden rounded-2xl border bg-background sm:grid-cols-2">
-                  <Link
-                    href={`/perfumes/${perfume.slug}`}
-                    className="relative aspect-[4/5] bg-muted sm:aspect-auto sm:min-h-80"
-                  >
-                    <Image
-                      src={perfume.images[0].src}
-                      alt={perfume.images[0].alt}
-                      fill
-                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                      className="object-cover"
-                    />
-                  </Link>
-                  <div className="flex flex-col justify-center gap-3 p-8 md:p-10">
-                    <span className="text-xs tracking-[0.3em] text-muted-foreground uppercase">
-                      {perfume.concentration}
-                    </span>
-                    <h3 className="font-heading text-3xl font-semibold">{perfume.name}</h3>
-                    <p className="text-sm text-muted-foreground">{perfume.tagline}</p>
-                    <p className="text-xl font-semibold">{formatPrice(perfume.price)}</p>
-                    <Button asChild size="lg" className="mt-3 h-10 w-fit px-5">
-                      <Link href={`/perfumes/${perfume.slug}`}>Discover</Link>
-                    </Button>
-                  </div>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+  return (
+    <section id="collection" className="scroll-mt-16 bg-muted/50 py-14 md:py-20">
+      <Container>
+        <SectionHeading eyebrow="The Collection" title="Featured signatures" />
+
+        {/* Side padding holds the arrows, so they never sit outside the page. */}
+        <div className="relative px-11 md:px-16">
+          <Carousel setApi={setApi} opts={{ align: "center", loop: true }} plugins={[autoplay]} className="static">
+            {/* Vertical padding leaves room for the raised card and its shadow. */}
+            <CarouselContent className="-ml-4 py-8 md:-ml-6">
+              {perfumes.map((perfume, i) => {
+                const active = i === selected;
+                const href = `/perfumes/${perfume.slug}`;
+                return (
+                  <CarouselItem key={perfume.id} className="basis-[85%] pl-4 sm:basis-1/2 md:pl-6 lg:basis-1/3">
+                    <div
+                      className={cn(
+                        "flex h-full flex-col overflow-hidden rounded-2xl border bg-background transition-all duration-500 ease-out",
+                        active
+                          ? "-translate-y-4 scale-100 opacity-100 shadow-2xl shadow-black/10"
+                          : "translate-y-4 scale-[0.9] opacity-60",
+                      )}
+                    >
+                      <Link href={href} className="relative block aspect-[5/4] bg-muted" tabIndex={active ? 0 : -1}>
+                        <Image
+                          src={perfume.images[0].src}
+                          alt={perfume.images[0].alt}
+                          fill
+                          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 45vw, 80vw"
+                          className="object-cover"
+                        />
+                      </Link>
+                      <div className="flex flex-1 flex-col items-center gap-2 p-6 text-center">
+                        <span className="text-[11px] tracking-[0.3em] text-muted-foreground uppercase">
+                          {perfume.concentration}
+                        </span>
+                        <h3 className="font-heading text-2xl font-semibold">{perfume.name}</h3>
+                        <p className="text-sm text-muted-foreground">{perfume.tagline}</p>
+                        <p className="text-lg font-semibold">{formatPrice(perfume.price)}</p>
+                        <Button asChild size="lg" className="mt-2 h-10 px-6" tabIndex={active ? 0 : -1}>
+                          <Link href={href}>Discover</Link>
+                        </Button>
+                      </div>
+                    </div>
+                  </CarouselItem>
+                );
+              })}
+            </CarouselContent>
+            <CarouselPrevious className="left-0 size-10 bg-background shadow-sm md:size-11" />
+            <CarouselNext className="right-0 size-10 bg-background shadow-sm md:size-11" />
+          </Carousel>
+        </div>
       </Container>
     </section>
   );

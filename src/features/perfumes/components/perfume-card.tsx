@@ -14,10 +14,10 @@ export function PerfumeCard({ perfume }: { perfume: Perfume }) {
 
   return (
     <Card className="group h-full gap-0 overflow-hidden py-0 transition-shadow hover:shadow-lg">
-      <Link href={href} className="relative block aspect-[4/5] overflow-hidden bg-muted">
+      <Link href={href} className="relative block aspect-[5/4] overflow-hidden bg-muted">
         <Image
           src={perfume.images[0].src}
-          alt={perfume.name}
+          alt={perfume.images[0].alt}
           fill
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"

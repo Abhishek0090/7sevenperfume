@@ -15,16 +15,16 @@ import { StockBadge } from "./stock-badge";
 export function PerfumeDetails({ perfume }: { perfume: Perfume }) {
   return (
     <section>
-      <Container className="pt-10 pb-20 md:pt-14 md:pb-28">
+      <Container className="pt-6 pb-14 md:pt-8 md:pb-20">
         <Link
           href="/#perfumes"
-          className="mb-10 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
         >
           <ChevronLeftIcon className="size-4" />
           Back to collection
         </Link>
 
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
           {/* Left: image gallery */}
           <div className="lg:sticky lg:top-24 lg:self-start">
             <PerfumeGallery images={perfume.images} />

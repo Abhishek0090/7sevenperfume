@@ -52,10 +52,11 @@ export function CartSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon-lg" className="relative" aria-label={`Cart, ${totalItems} items`}>
-          <ShoppingBagIcon />
+        <Button size="lg" className="h-10 gap-2 px-4" aria-label={`Cart, ${totalItems} items`}>
+          <ShoppingBagIcon data-icon="inline-start" />
+          <span>Cart</span>
           {hydrated && totalItems > 0 && (
-            <Badge className="absolute -top-1 -right-1 h-5 min-w-5 justify-center rounded-full px-1 text-[10px] tabular-nums">
+            <Badge className="h-5 min-w-5 justify-center rounded-full bg-primary-foreground px-1.5 text-[11px] text-primary tabular-nums">
               {totalItems}
             </Badge>
           )}

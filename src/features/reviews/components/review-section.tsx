@@ -13,11 +13,11 @@ export function ReviewSection({ reviews, summary }: ReviewSectionProps) {
   const maxCount = Math.max(...summary.distribution, 1);
 
   return (
-    <section id="reviews" className="scroll-mt-16 border-t bg-muted/30 py-20 md:py-28">
+    <section id="reviews" className="scroll-mt-16 border-t bg-muted/30 py-14 md:py-20">
       <Container>
         <SectionHeading eyebrow="Reviews" title="What customers say" />
 
-        <div className="grid gap-12 lg:grid-cols-[300px_1fr] lg:gap-16">
+        <div className="grid gap-8 lg:grid-cols-[300px_1fr] lg:gap-12">
           <aside className="space-y-6 rounded-2xl border bg-background p-6 lg:sticky lg:top-24 lg:self-start">
             <div className="space-y-2">
               <p className="font-heading text-6xl font-semibold">{summary.average.toFixed(1)}</p>

@@ -2,10 +2,17 @@ import type { Dealer, Perfume, PerfumeImage } from "../types";
 
 // Mock data. Replace with a database query inside perfume.service.ts.
 
-const views = ["Front view", "Angled view", "With gift box", "Cap and label close-up"];
+// Gallery order: the first image is the cover; "notes" shows the bottle with its key ingredients.
+const views = [
+  { file: "1.svg", label: "front view" },
+  { file: "notes.svg", label: "with its key notes" },
+  { file: "2.svg", label: "close-up" },
+  { file: "3.svg", label: "with gift box" },
+  { file: "4.svg", label: "cap and label detail" },
+];
 
 function gallery(slug: string, name: string): PerfumeImage[] {
-  return views.map((view, i) => ({ src: `/images/perfumes/${slug}/${i + 1}.svg`, alt: `${name}, ${view.toLowerCase()}` }));
+  return views.map((view) => ({ src: `/images/perfumes/${slug}/${view.file}`, alt: `${name}, ${view.label}` }));
 }
 
 const mainDealer: Dealer = {

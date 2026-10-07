@@ -10,7 +10,7 @@ export function SiteFooter() {
 
   return (
     <footer id="contact" className="bg-primary text-primary-foreground">
-      <Container className="grid gap-12 py-16 md:grid-cols-3 md:py-20">
+      <Container className="grid gap-10 py-12 md:grid-cols-3 md:py-16">
         <div className="space-y-4">
           <div className="flex items-baseline gap-1.5">
             <span className="font-heading text-3xl font-semibold">7</span>

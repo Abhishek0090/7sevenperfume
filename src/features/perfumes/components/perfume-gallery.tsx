@@ -58,7 +58,7 @@ export function PerfumeGallery({ images }: { images: PerfumeImage[] }) {
       </Carousel>
 
       {images.length > 1 && (
-        <ul className="grid grid-cols-4 gap-3">
+        <ul className="grid grid-cols-5 gap-2 sm:gap-3">
           {images.map((image, i) => (
             <li key={image.src}>
               <button
