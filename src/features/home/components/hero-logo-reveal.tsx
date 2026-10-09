@@ -216,7 +216,7 @@ export function HeroLogoReveal() {
           <div ref={logoWrapRef} className="flex w-full flex-col items-center will-change-transform">
             <div ref={eyebrowRef} className="mb-6 flex flex-col items-center opacity-35 sm:mb-8">
               <span className="text-[11px] font-medium tracking-[0.35em] text-muted-foreground uppercase sm:text-xs sm:tracking-[0.5em]">
-                Luxury Fragrance House
+                Your scent. Your statement.
               </span>
             </div>
 
