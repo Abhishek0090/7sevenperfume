@@ -63,7 +63,7 @@ To switch to a database (Prisma, Drizzle, Supabase, a REST API):
 
 ### Perfume images
 
-Each perfume has an `images` array (`{ src, alt }`). The first image is the cover used on cards, the carousel and the cart; the details page shows all of them in a gallery with thumbnails. Placeholder images live in `public/images/perfumes/<slug>/1.svg` to `4.svg`. Replace them with real photos (any count) and update the paths in `perfumes.data.ts`, or store image URLs in a `perfume_images` table later.
+Each perfume has an `images` array (`{ src, alt }`). The first image is the cover used on cards, the carousel and the cart; the details page shows all of them in a gallery with thumbnails. The gallery SVGs in `public/images/perfumes/<slug>/` (`1.svg` front, `notes.svg`, `2.svg` editorial, `3.svg` studio, `4.svg` scent profile) are generated from the product photos in `public/seven_perfumes/`, which are embedded inside each SVG. After changing images, bump `PERFUME_IMAGE_VERSION` in `src/lib/perfume-image.ts` so browsers fetch the new files.
 
 ### Review photos
 

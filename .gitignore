@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# copy-paste setup/update scripts (generated, very large)
+/7perfumes-share/

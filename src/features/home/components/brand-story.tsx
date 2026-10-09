@@ -4,11 +4,13 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 import { Container } from "@/components/layout/container";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by the hidden story column; keep for when it is restored
 import { Reveal } from "@/components/motion/reveal";
 import { perfumeImage } from "@/lib/perfume-image";
 import type { HeroStats } from "./hero-parallax";
 
 /** Counts a number up from 0 the first time it scrolls into view. */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by the hidden story column; keep for when it is restored
 function CountUp({ value, suffix, decimals = 0 }: { value: number; suffix: string; decimals?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
 
@@ -52,6 +54,7 @@ export function BrandStory({ stats }: { stats: HeroStats }) {
   const backCardRef = useRef<HTMLDivElement>(null);
   const frontCardRef = useRef<HTMLDivElement>(null);
   // Same catalogue figures as the hero, so the page never contradicts itself.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by the hidden story column; keep for when it is restored
   const STATS = [
     { value: stats.perfumeCount, suffix: "", label: "Signature scents" },
     { value: Number(stats.averageRating.toFixed(1)), suffix: "", label: "Average rating", decimals: 1 },
@@ -98,7 +101,9 @@ export function BrandStory({ stats }: { stats: HeroStats }) {
         aria-hidden
         className="absolute -top-40 -right-40 size-[40rem] rounded-full bg-[radial-gradient(circle,rgba(184,147,90,0.25),transparent_65%)]"
       />
-      <Container className="relative grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+      {/* Two-column layout restored with the text column: "relative grid items-center gap-14 lg:grid-cols-2 lg:gap-20" */}
+      <Container className="relative grid place-items-center">
+        {/* Story text and stats hidden for now. Restore by uncommenting this column and the grid class above.
         <div>
           <Reveal>
             <span className="text-xs tracking-[0.4em] text-gold uppercase">Our story</span>
@@ -124,6 +129,7 @@ export function BrandStory({ stats }: { stats: HeroStats }) {
             ))}
           </dl>
         </div>
+        */}
 
         <div className="relative mx-auto aspect-[4/5] w-full max-w-md">
           <div
@@ -131,14 +137,14 @@ export function BrandStory({ stats }: { stats: HeroStats }) {
             className="absolute inset-y-6 left-0 w-3/5 overflow-hidden rounded-2xl shadow-2xl ring-1 ring-gold/30 will-change-transform"
             style={{ transform: "rotate(-4deg)" }}
           >
-            <Image src={perfumeImage("oud-royale", "notes.svg")} alt="" fill sizes="300px" className="object-cover" />
+            <Image src={perfumeImage("bombastic", "2.svg")} alt="" fill sizes="300px" className="object-cover" />
           </div>
           <div
             ref={frontCardRef}
             className="absolute inset-y-0 right-0 w-3/5 overflow-hidden rounded-2xl shadow-2xl ring-1 ring-gold/30 will-change-transform"
             style={{ transform: "rotate(3deg)" }}
           >
-            <Image src={perfumeImage("rose-eternelle", "notes.svg")} alt="" fill sizes="300px" className="object-cover" />
+            <Image src={perfumeImage("sweet-talk", "2.svg")} alt="" fill sizes="300px" className="object-cover" />
           </div>
         </div>
       </Container>

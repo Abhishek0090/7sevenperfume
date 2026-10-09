@@ -47,7 +47,7 @@ export interface Perfume {
   sizeMl: number;
   /** Units in stock */
   stock: number;
-  concentration: "Eau de Parfum" | "Eau de Toilette" | "Parfum" | "Attar";
+  concentration: "Extrait de Parfum" | "Eau de Parfum" | "Eau de Toilette" | "Parfum" | "Attar";
   gender: "Men" | "Women" | "Unisex";
   family: FragranceFamily;
   /** Brand colour of the scent, used for page tints and accents. */

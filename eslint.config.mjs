@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated copy-paste setup/update scripts.
+    "7perfumes-share/**",
   ]),
 ]);
 

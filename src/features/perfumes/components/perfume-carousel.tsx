@@ -68,7 +68,7 @@ export function PerfumeCarousel({ perfumes }: { perfumes: Perfume[] }) {
                           : "translate-y-4 scale-[0.9] opacity-60",
                       )}
                     >
-                      <Link href={href} className="relative block aspect-[5/4] bg-muted" tabIndex={active ? 0 : -1}>
+                      <Link href={href} className="relative block aspect-[4/5] bg-muted" tabIndex={active ? 0 : -1}>
                         <Image
                           src={perfume.images[0].src}
                           alt={perfume.images[0].alt}

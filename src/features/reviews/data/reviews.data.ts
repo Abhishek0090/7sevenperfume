@@ -61,7 +61,7 @@ const seeds: ReviewSeed[] = [
   },
 ];
 
-const perfumeIds = ["p-001", "p-002", "p-003", "p-004", "p-005", "p-006", "p-007", "p-008"];
+const perfumeIds = ["p-001", "p-002", "p-003", "p-004", "p-005", "p-006", "p-007"];
 
 // Give each perfume a rotated subset of the seed reviews so the pages differ.
 export const reviews: Review[] = perfumeIds.flatMap((perfumeId, pIndex) =>

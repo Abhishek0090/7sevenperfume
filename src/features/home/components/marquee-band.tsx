@@ -1,6 +1,6 @@
 const ITEMS = [
   "Handcrafted in small batches",
-  "Long-lasting Eau de Parfum",
+  "Long-lasting Extrait de Parfum",
   "Order directly on WhatsApp",
   "Gift-ready packaging",
   "Seven signature scents",

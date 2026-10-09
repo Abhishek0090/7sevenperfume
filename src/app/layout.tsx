@@ -48,6 +48,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        {/* Home page: stop the browser restoring the old scroll position on reload (before first paint),
+            so the hero always starts from the top instead of jumping. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{if(location.pathname==="/"&&!location.hash){history.scrollRestoration="manual";window.scrollTo(0,0)}}catch(e){}})();`,
+          }}
+        />
       </head>
       <body className="flex min-h-full flex-col">
         <ThemeProvider>

@@ -14,7 +14,7 @@ export function PerfumeCard({ perfume }: { perfume: Perfume }) {
 
   return (
     <Card className="group h-full gap-0 overflow-hidden bg-card py-0 transition-all duration-500 ease-out hover:-translate-y-2 hover:shadow-2xl hover:shadow-black/10 hover:ring-gold/60">
-      <Link href={href} className="relative block aspect-[5/4] overflow-hidden bg-muted">
+      <Link href={href} className="relative block aspect-[4/5] overflow-hidden bg-muted">
         <Image
           src={perfume.images[0].src}
           alt={perfume.images[0].alt}
